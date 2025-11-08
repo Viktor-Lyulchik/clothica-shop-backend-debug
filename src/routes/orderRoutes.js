@@ -1,20 +1,21 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate.js';
+import { celebrate } from 'celebrate';
+
 import {
-  getAllOrders,
-  getOrderById,
   createOrder,
-  updateOrder,
-  deleteOrder,
+  getUserOrders,
+  updateOrderStatus,
 } from '../controllers/orderController.js';
+import { requireAdmin } from '../middleware/requireAdmin.js';
+import { createOrderSchema, updateStatusSchema } from '../validations/orderValidation.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
-router.get('/api/orders', authenticate, ctrlWrapper(getAllOrders));
-router.get('/api/orders/:id', authenticate, ctrlWrapper(getOrderById));
-router.post('/api/orders', authenticate, ctrlWrapper(createOrder));
-router.patch('/api/orders/:id', authenticate, ctrlWrapper(updateOrder));
-router.delete('/api/orders/:id', authenticate, ctrlWrapper(deleteOrder));
+
+router.post(`/api/orders`, celebrate(createOrderSchema), ctrlWrapper(createOrder));
+router.get(`/api/orders/`, authenticate, ctrlWrapper(getUserOrders));
+router.patch(`/api/:orderId/status`, authenticate, requireAdmin, celebrate(updateStatusSchema), ctrlWrapper(updateOrderStatus));
 
 export default router;
