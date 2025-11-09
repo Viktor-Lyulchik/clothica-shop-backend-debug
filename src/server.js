@@ -16,8 +16,8 @@ import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import goodRoutes from './routes/goodRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import reviewRoutes from './routes/reviewRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
+import subscriptionRoutes from './routes/subscriptionRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3030;
@@ -64,6 +64,7 @@ app.use('/api', categoryRoutes);
 app.use('/api', goodRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', feedbackRoutes);
+app.use('/api', subscriptionRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
