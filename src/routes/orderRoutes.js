@@ -15,7 +15,7 @@ const router = Router();
 
 
 router.post(`/api/orders`, celebrate(createOrderSchema), ctrlWrapper(createOrder));
-router.get(`/api/orders/`, authenticate, ctrlWrapper(getUserOrders));
+router.get(`/api/orders`, authenticate, ctrlWrapper(getUserOrders));
 router.patch(`/api/:orderId/status`, authenticate, requireAdmin, celebrate(updateStatusSchema), ctrlWrapper(updateOrderStatus));
 
 export default router;
