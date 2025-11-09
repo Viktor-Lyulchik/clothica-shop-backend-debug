@@ -19,7 +19,7 @@ export const getAllCategories = async (req, res) => {
     categoriesQuery.skip(skip).limit(perPage),
   ]);
 
-  const totalPage = Math.ceil(totalItems / perPage);
+  const totalPages = Math.ceil(totalItems / perPage);
 
   res.status(200).json({
     success: true,
@@ -28,7 +28,7 @@ export const getAllCategories = async (req, res) => {
     page,
     perPage,
     totalItems,
-    totalPage,
+    totalPages,
   });
 };
 
