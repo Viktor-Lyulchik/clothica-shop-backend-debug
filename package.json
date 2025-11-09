@@ -1,5 +1,5 @@
 {
-  "name": "project-7-backend",
+  "name": "clothica-shop-backend",
   "version": "1.0.0",
   "description": "Clothica Backend API",
   "main": "src/server.js",
