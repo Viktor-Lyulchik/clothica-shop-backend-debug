@@ -6,8 +6,7 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
-
-router.post('/api/feedbacks', celebrate(createFeedbackSchema), ctrlWrapper(createFeedback));
-router.get('/api/feedbacks', celebrate(getAllFeedbacksSchema),  ctrlWrapper(getAllFeedbacks));
+router.post('/feedbacks', celebrate(createFeedbackSchema), ctrlWrapper(createFeedback));
+router.get('/feedbacks', celebrate(getAllFeedbacksSchema),  ctrlWrapper(getAllFeedbacks));
 
 export default router;
