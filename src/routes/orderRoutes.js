@@ -7,13 +7,27 @@ import {
   getUserOrders,
   updateOrderStatus,
 } from '../controllers/orderController.js';
-import { createOrderSchema, updateStatusSchema } from '../validations/orderValidation.js';
+import {
+  createOrderSchema,
+  updateStatusSchema,
+} from '../validations/orderValidation.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
-router.post(`/orders`, celebrate(createOrderSchema), ctrlWrapper(createOrder));
+router.post(
+  `/orders`,
+  authenticate,
+  celebrate(createOrderSchema),
+  ctrlWrapper(createOrder),
+);
 router.get(`/orders`, authenticate, ctrlWrapper(getUserOrders));
-router.patch(`/orders/:id/status`, authenticate, requireAdmin, celebrate(updateStatusSchema), ctrlWrapper(updateOrderStatus));
+router.patch(
+  `/orders/:id/status`,
+  authenticate,
+  requireAdmin,
+  celebrate(updateStatusSchema),
+  ctrlWrapper(updateOrderStatus),
+);
 
 export default router;
