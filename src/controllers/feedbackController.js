@@ -1,12 +1,9 @@
-
 import { Feedback } from '../models/feedback.js';
 
 export const createFeedback = async (req, res, next) => {
   const feedback = await Feedback.create(req.body);
   res.status(201).json(feedback);
 };
-
-
 
 export const getAllFeedbacks = async (req, res, next) => {
   const page = 1;
@@ -24,7 +21,6 @@ export const getAllFeedbacks = async (req, res, next) => {
       .limit(perPage),
     Feedback.countDocuments(filter),
   ]);
-
   const totalPages = Math.ceil(total / perPage);
 
   res.status(200).json({
