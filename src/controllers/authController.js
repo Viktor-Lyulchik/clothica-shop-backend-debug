@@ -33,10 +33,11 @@ export const loginUser = async (req, res) => {
   const { phone, password } = req.body;
 
   const user = await User.findOne({ phone });
-  if (!user) throw createHttpError(401, 'User not found');
+  if (!user) throw createHttpError(401, 'Invalid phone number or password');
 
   const isValidPassword = await bcrypt.compare(password, user.password);
-  if (!isValidPassword) throw createHttpError(401, 'Invalid credentials');
+  if (!isValidPassword)
+    throw createHttpError(401, 'Invalid phone number or password');
 
   await Session.deleteOne({ userId: user._id });
 
@@ -58,27 +59,22 @@ export const logoutUser = async (req, res) => {
 };
 
 export const refreshUserSession = async (req, res) => {
-  const session = await Session.findOne({
-    _id: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
-  if (!session) throw createHttpError(401, 'Session not found');
+  const { sessionId, refreshToken } = req.cookies;
+  const session = await Session.findOne({ _id: sessionId, refreshToken });
+  if (!session)
+    throw createHttpError(401, 'Session not found or refresh token is invalid');
 
   const isRefreshTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
   if (isRefreshTokenExpired)
-    throw createHttpError(401, 'Session token expired');
+    throw createHttpError(401, 'Session has expired. Please log in again');
 
-  await Session.deleteOne({
-    _id: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
   const newSession = await createSession(session.userId);
   setSessionCookies(res, newSession);
 
-  res.status(200).json({
-    message: 'Session refreshed',
-  });
+  await Session.deleteOne({ _id: sessionId, refreshToken });
+
+  res.status(200).json({ message: 'Session refreshed successfully' });
 };
 
 const resetCodes = new Map();
@@ -102,7 +98,7 @@ export const requestPasswordReset = async (req, res) => {
   }
   res.status(200).json({
     message:
-      'If an account with this phone number exists and has a linked Telegram, a reset code has been sent.',
+      'If an account with this phone number exists and has a linked Telegram, a reset code has been sent',
   });
 };
 
@@ -110,17 +106,15 @@ export const resetPassword = async (req, res) => {
   const { phone, code, password } = req.body;
 
   const user = await User.findOne({ phone });
-  if (!user) {
-    throw createHttpError(401, 'Invalid phone number or reset code.');
-  }
-  const storedCode = resetCodes.get(user._id.toString());
+  if (!user) throw createHttpError(401, 'Invalid phone number or reset code');
 
-  if (!storedCode || storedCode.code !== code) {
-    throw createHttpError(401, 'Invalid phone number or reset code.');
-  }
+  const storedCode = resetCodes.get(user._id.toString());
+  if (!storedCode || storedCode.code !== code)
+    throw createHttpError(401, 'Invalid phone number or reset code');
+
   if (Date.now() > storedCode.expires) {
     resetCodes.delete(user._id.toString());
-    throw createHttpError(401, 'Reset code has expired.');
+    throw createHttpError(401, 'Reset code has expired');
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   await User.updateOne({ _id: user._id }, { password: hashedPassword });
@@ -129,6 +123,6 @@ export const resetPassword = async (req, res) => {
   resetCodes.delete(user._id.toString());
 
   res.status(200).json({
-    message: 'Password has been reset successfully.',
+    message: 'Password has been reset successfully',
   });
 };

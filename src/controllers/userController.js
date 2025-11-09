@@ -71,13 +71,11 @@ export const updateUserAvatar = async (req, res) => {
       'No file uploaded. Please include an image file',
     );
   }
-
   const result = await saveFileToCloudinary(req.file.buffer);
 
   if (req.user.avatar_id != '') {
     await deleteFileFromCloudinary(req.user.avatar_id);
   }
-
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -86,7 +84,6 @@ export const updateUserAvatar = async (req, res) => {
     },
     { new: true },
   );
-
   res.status(200).json({
     success: true,
     message: 'Avatar updated successfully',
@@ -101,7 +98,6 @@ export const getTelegramLink = (req, res) => {
   if (!botUsername) {
     throw createHttpError(500, 'Telegram bot is not configured on the server');
   }
-
   const link = `https://t.me/${botUsername}?start=${req.user._id}`;
 
   res.status(200).json({
