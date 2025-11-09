@@ -13,7 +13,7 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 const router = Router();
 
 router.post(`/orders`, celebrate(createOrderSchema), ctrlWrapper(createOrder));
-router.get(`/orders/`, authenticate, ctrlWrapper(getUserOrders));
-router.patch(`/:orderId/status`, authenticate, requireAdmin, celebrate(updateStatusSchema), ctrlWrapper(updateOrderStatus));
+router.get(`/orders`, authenticate, ctrlWrapper(getUserOrders));
+router.patch(`/orders/:id/status`, authenticate, requireAdmin, celebrate(updateStatusSchema), ctrlWrapper(updateOrderStatus));
 
 export default router;

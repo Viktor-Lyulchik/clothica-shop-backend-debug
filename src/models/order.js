@@ -3,9 +3,9 @@ import { ORDER_STATUS } from '../constants/orderStatuses.js';
 
 const orderSchema = new Schema(
   {
-    products: [
+    goods: [
       {
-        productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+        goodId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
         amount: { type: Number, required: true, min: 1 },
         size: { type: String, required: true },
         _id: false,
@@ -27,9 +27,9 @@ const orderSchema = new Schema(
     },
 
     userName: { type: String, required: true },
-    userLastname: { type: String, required: true },
-    userTel: { type: String, required: true },
-    postOfNum: { type: String, required: true },
+    userLastName: { type: String, required: true },
+    userPhone: { type: String, required: true },
+    branchnum_np: { type: String, required: true },
   },
   {
     timestamps: true,
