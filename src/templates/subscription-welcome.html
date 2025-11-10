@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вітаємо в Clothica!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #a5a58d;
+      color: #ffffff;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 40px 30px;
+      color: #333333;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .content p {
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #6b705c;
+      color: #ffffff;
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .footer a {
+      color: #6b705c;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Clothica</h1>
+    </div>
+    <div class="content">
+      <p style="font-size: 20px; font-weight: 600; color: #333;">Дякуємо за підписку!</p>
+      <p>Тепер ви будете першими дізнаватися про наші новини, ексклюзивні акції та спеціальні пропозиції.</p>
+      <p>Знайдіть свій стиль разом з нами.</p>
+      <a href="{{clientUrl}}" class="button">Перейти до магазину</a>
+    </div>
+    <div class="footer">
+      <p>&copy; {{year}} Clothica. Всі права захищені.</p>
+      <p>Ви отримали цей лист, тому що підписалися на нашу розсилку.</p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -10,7 +10,7 @@ import {
 import {
   createOrderSchema,
   updateStatusSchema,
-} from '../validations/orderValidation.js';
+} from '../validations/ordersValidation.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
