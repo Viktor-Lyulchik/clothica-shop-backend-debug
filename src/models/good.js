@@ -49,7 +49,7 @@ const goodSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: ['men', 'women', 'unisex', 'man'],
+      enum: ['women', 'unisex', 'man'],
     },
     characteristics: [
       {

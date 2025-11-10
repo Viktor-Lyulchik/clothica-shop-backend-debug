@@ -11,8 +11,10 @@ export const getAllGoods = async (req, res) => {
     size,
     minPrice,
     maxPrice,
-    // sortBy = 'createdAt',
-    // sortOrder = 'desc',
+    name,
+    search,
+    sortBy = 'price',
+    sortOrder = 'asc',
   } = req.query;
 
   if (page < 1) {
@@ -23,35 +25,37 @@ export const getAllGoods = async (req, res) => {
 
   const goodsQuery = Good.find();
 
-  const filter = {};
-
   if (gender) {
     goodsQuery.where('gender').equals(gender);
   }
 
   if (size) {
-    const sizeArray = Array.isArray(size) ? size : [size];
-    filter.size = { $in: sizeArray };
+    const sizeArray = size.split(',').map(s => s.trim());
+    goodsQuery.where('size').in(sizeArray);
   }
 
-  if (minPrice !== undefined || maxPrice !== undefined) {
-    filter['price.value'] = {};
+  if (minPrice !== undefined) {
+    goodsQuery.where('price.value').gte(Number(minPrice));
+  }
 
-    if (minPrice !== undefined) {
-      filter['price.value'].$gte = Number(minPrice);
-    }
+  if (maxPrice !== undefined) {
+    goodsQuery.where('price.value').lte(Number(maxPrice));
+  }
 
-    if (maxPrice !== undefined) {
-      filter['price.value'].$lte = Number(maxPrice);
-    }
+  if (name) {
+    goodsQuery.where('name').regex(new RegExp(name, 'i'));
+  }
+
+  if (search) {
+    goodsQuery.where('name').regex(new RegExp(search, 'i'));
   }
 
   const [totalItems, goods] = await Promise.all([
     goodsQuery.clone().countDocuments(),
-    goodsQuery.skip(skip).limit(perPage),
+    goodsQuery.skip(skip).limit(perPage).sort({[sortBy]: sortOrder}),
   ]);
 
-  const totalPage = Math.ceil(totalItems / perPage);
+  const totalPages = Math.ceil(totalItems / perPage);
 
   res.status(200).json({
     success: true,
@@ -60,7 +64,7 @@ export const getAllGoods = async (req, res) => {
     page,
     perPage,
     totalItems,
-    totalPage,
+    totalPages,
   });
 };
 
