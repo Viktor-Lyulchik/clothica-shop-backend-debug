@@ -7,12 +7,15 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  updateCategoryImg,
 } from '../controllers/categoryController.js';
 import {
   getCategoriesSchema,
   categoryIdParamSchema,
 } from '../validations/categoriesValidation.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { upload } from '../middleware/multer.js';
+
 
 const router = Router();
 
@@ -192,5 +195,12 @@ router.patch('/categories/:id', authenticate, ctrlWrapper(updateCategory));
  *         description: Not found
  */
 router.delete('/categories/:id', authenticate, ctrlWrapper(deleteCategory));
+
+router.patch(
+  '/categories/:id/img',
+  authenticate,
+  upload.single('img'),
+  updateCategoryImg,
+);
 
 export default router;
