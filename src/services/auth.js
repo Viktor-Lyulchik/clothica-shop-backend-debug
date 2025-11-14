@@ -20,6 +20,7 @@ export const createSession = async (userId) => {
 export const setSessionCookies = (res, session) => {
   const common = {
     httpOnly: true,
+    expires: new Date(Date.now() + ONE_DAY),
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
     path: '/',
