@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   createFeedback,
   getAllFeedbacks,
@@ -8,7 +9,6 @@ import {
   createFeedbackSchema,
   getAllFeedbacksSchema,
 } from '../validations/feedbacksValidation.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 

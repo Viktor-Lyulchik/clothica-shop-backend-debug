@@ -2,6 +2,13 @@ export const errorHandler = (err, req, res, next) => {
   console.error('Error:', err);
 
   if (err.name === 'ValidationError') {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error. Please check your input data',
+      });
+    }
+
     const errors = Object.values(err.errors).map((error) => ({
       field: error.path,
       message: error.message,

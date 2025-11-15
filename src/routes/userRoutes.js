@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   getProfile,
   updateProfile,
   deleteProfile,
   getTelegramLink,
 } from '../controllers/userController.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 

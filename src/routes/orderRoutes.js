@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import { celebrate } from 'celebrate';
 import { authenticate } from '../middleware/authenticate.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
-import { celebrate } from 'celebrate';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   createOrder,
   getUserOrders,
@@ -11,7 +12,6 @@ import {
   createOrderSchema,
   updateStatusSchema,
 } from '../validations/ordersValidation.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
@@ -97,11 +97,7 @@ const router = Router();
  *       400:
  *         description: Validation error
  */
-router.post(
-  `/orders`,
-  celebrate(createOrderSchema),
-  ctrlWrapper(createOrder),
-);
+router.post(`/orders`, celebrate(createOrderSchema), ctrlWrapper(createOrder));
 
 /**
  * @swagger

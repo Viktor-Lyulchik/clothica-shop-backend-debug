@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { authenticate } from '../middleware/authenticate.js';
+import { requireAdmin } from '../middleware/requireAdmin.js';
+import { upload } from '../middleware/multer.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   getAllCategories,
   getCategoryById,
@@ -13,8 +16,6 @@ import {
   getCategoriesSchema,
   categoryIdParamSchema,
 } from '../validations/categoriesValidation.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { upload } from '../middleware/multer.js';
 
 const router = Router();
 
@@ -135,7 +136,12 @@ router.get(
  *       401:
  *         description: Unauthorized
  */
-router.post('/categories', authenticate, ctrlWrapper(createCategory));
+router.post(
+  '/categories',
+  authenticate,
+  requireAdmin,
+  ctrlWrapper(createCategory),
+);
 
 /**
  * @swagger
@@ -169,7 +175,12 @@ router.post('/categories', authenticate, ctrlWrapper(createCategory));
  *       404:
  *         description: Not found
  */
-router.patch('/categories/:id', authenticate, ctrlWrapper(updateCategory));
+router.patch(
+  '/categories/:id',
+  authenticate,
+  requireAdmin,
+  ctrlWrapper(updateCategory),
+);
 
 /**
  * @swagger
@@ -193,13 +204,72 @@ router.patch('/categories/:id', authenticate, ctrlWrapper(updateCategory));
  *       404:
  *         description: Not found
  */
-router.delete('/categories/:id', authenticate, ctrlWrapper(deleteCategory));
+router.delete(
+  '/categories/:id',
+  authenticate,
+  requireAdmin,
+  ctrlWrapper(deleteCategory),
+);
 
+/**
+ * @swagger
+ * /api/categories/{id}/img:
+ *   patch:
+ *     summary: Update category image (admin only)
+ *     tags: [Categories]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               img:
+ *                 type: string
+ *                 format: binary
+ *                 description: The image file to upload.
+ *     responses:
+ *       200:
+ *         description: Image updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     img:
+ *                       type: string
+ *                       format: uri
+ *       400:
+ *         description: Bad Request (e.g., no file uploaded or invalid file type).
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden (user is not an admin).
+ *       404:
+ *         description: Category not found.
+ */
 router.patch(
   '/categories/:id/img',
   authenticate,
+  requireAdmin,
   upload.single('img'),
-  updateCategoryImg,
+  ctrlWrapper(updateCategoryImg),
 );
 
 export default router;

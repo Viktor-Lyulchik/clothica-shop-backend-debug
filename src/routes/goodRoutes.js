@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
+import { authenticate } from '../middleware/authenticate.js';
+import { requireAdmin } from '../middleware/requireAdmin.js';
+import { processCategoryFilter } from '../middleware/processCategoryFilter.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   getAllGoods,
@@ -14,8 +17,6 @@ import {
   createGoodSchema,
   updateGoodSchema,
 } from '../validations/goodsValidation.js';
-import { authenticate } from '../middleware/authenticate.js';
-import { processCategoryFilter } from '../middleware/processCategoryFilter.js';
 
 const router = Router();
 
@@ -155,8 +156,9 @@ router.get(
  */
 router.post(
   '/goods',
-  celebrate(createGoodSchema),
   authenticate,
+  requireAdmin,
+  celebrate(createGoodSchema),
   ctrlWrapper(createGood),
 );
 
@@ -187,8 +189,9 @@ router.post(
  */
 router.patch(
   '/goods/:id',
-  celebrate(updateGoodSchema),
   authenticate,
+  requireAdmin,
+  celebrate(updateGoodSchema),
   ctrlWrapper(updateGood),
 );
 
@@ -214,8 +217,9 @@ router.patch(
  */
 router.delete(
   '/goods/:id',
-  celebrate(getGoodByIdSchema),
   authenticate,
+  requireAdmin,
+  celebrate(getGoodByIdSchema),
   ctrlWrapper(deleteGood),
 );
 

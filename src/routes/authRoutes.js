@@ -1,11 +1,8 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
-import {
-  registerUserSchema,
-  loginUserSchema,
-  requestPasswordResetSchema,
-  resetPasswordSchema,
-} from '../validations/authValidation.js';
+import { authenticate } from '../middleware/authenticate.js';
+import { authLimiter } from '../middleware/rateLimitAuth.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   registerUser,
   loginUser,
@@ -14,9 +11,12 @@ import {
   requestPasswordReset,
   resetPassword,
 } from '../controllers/authController.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { authenticate } from '../middleware/authenticate.js';
-import { authLimiter } from '../middleware/rateLimitAuth.js';
+import {
+  registerUserSchema,
+  loginUserSchema,
+  requestPasswordResetSchema,
+  resetPasswordSchema,
+} from '../validations/authValidation.js';
 
 const router = Router();
 
