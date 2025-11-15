@@ -18,32 +18,34 @@ export const createSession = async (userId) => {
 };
 
 export const setSessionCookies = (res, session) => {
-  const common = {
+  const cookieOptions = {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
     path: '/',
   };
-
+  if (isProd) {
+    cookieOptions.secure = true;
+    cookieOptions.sameSite = 'none';
+  }
   res.cookie('accessToken', session.accessToken, {
-    ...common,
+    ...cookieOptions,
     maxAge: FIFTEEN_MINUTES,
   });
-
   res.cookie('refreshToken', session.refreshToken, {
-    ...common,
+    ...cookieOptions,
     maxAge: ONE_DAY,
   });
-
   res.cookie('sessionId', session._id, {
-    ...common,
+    ...cookieOptions,
     maxAge: ONE_DAY,
   });
 };
 
 export const clearSessionCookies = (res) => {
-  const cookieOptions = { path: '/' };
+  const cookieOptions = { httpOnly: true, path: '/' };
+  if (isProd) {
+    cookieOptions.secure = true;
+    cookieOptions.sameSite = 'none';
+  }
   res.clearCookie('sessionId', cookieOptions);
   res.clearCookie('accessToken', cookieOptions);
   res.clearCookie('refreshToken', cookieOptions);
