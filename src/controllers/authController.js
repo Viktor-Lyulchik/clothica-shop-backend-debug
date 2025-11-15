@@ -77,21 +77,19 @@ export const refreshUserSession = async (req, res) => {
   res.status(200).json({ message: 'Session refreshed successfully' });
 };
 
-const resetCodes = new Map();
-
 export const requestPasswordReset = async (req, res) => {
   const { phone } = req.body;
   const user = await User.findOne({ phone });
 
   if (user && user.telegramLinked && user.telegramChatId) {
-    const code = crypto.randomInt(100000, 999999).toString();
+    const resetCode = crypto.randomInt(100000, 999999).toString();
 
-    resetCodes.set(user._id.toString(), {
-      code,
-      expires: Date.now() + 10 * 60 * 1000,
-    });
+    user.passwordResetToken = resetCode;
+    user.passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
     try {
-      await sendPasswordResetCode(user.telegramChatId, code);
+      await sendPasswordResetCode(user.telegramChatId, resetCode);
     } catch (error) {
       console.error('Failed to send password reset code via Telegram:', error);
     }
@@ -105,22 +103,24 @@ export const requestPasswordReset = async (req, res) => {
 export const resetPassword = async (req, res) => {
   const { phone, code, password } = req.body;
 
-  const user = await User.findOne({ phone });
-  if (!user) throw createHttpError(401, 'Invalid phone number or reset code');
-
-  const storedCode = resetCodes.get(user._id.toString());
-  if (!storedCode || storedCode.code !== code)
-    throw createHttpError(401, 'Invalid phone number or reset code');
-
-  if (Date.now() > storedCode.expires) {
-    resetCodes.delete(user._id.toString());
-    throw createHttpError(401, 'Reset code has expired');
+  const user = await User.findOne({
+    phone,
+    passwordResetToken: code,
+    passwordResetTokenExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    throw createHttpError(
+      401,
+      'Invalid phone number or reset code, or code has expired',
+    );
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.updateOne({ _id: user._id }, { password: hashedPassword });
+  user.password = hashedPassword;
+  user.passwordResetToken = null;
+  user.passwordResetTokenExpires = null;
+  await user.save();
 
   await Session.deleteMany({ userId: user._id });
-  resetCodes.delete(user._id.toString());
 
   res.status(200).json({
     message: 'Password has been reset successfully',
