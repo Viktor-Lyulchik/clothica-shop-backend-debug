@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Clothica!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Nunito+Sans:wght@200&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #D6EAC0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 35px;
+      font-weight: 200;
+    }
+
+    .content {
+      padding: 40px 30px;
+      color: #333333;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .content p {
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #C5E1A5;
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .footer a {
+      color: #6b705c;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Clothica</h1>
+    </div>
+    <div class="content">
+      <p style="font-size: 20px; font-weight: 600; color: #333;">Thank you for subscribing!</p>
+      <p>You will now be the first to know about our news, exclusive promotions, and special offers.</p>
+      <p>Find your style with us.</p>
+      <a href="{{clientUrl}}" class="button">Go to Store</a>
+    </div>
+    <div class="footer">
+      <p>&copy; {{year}} Clothica. All rights reserved.</p>
+      <p>You received this email because you subscribed to our newsletter.</p>
+    </div>
+  </div>
+</body>
+
+</html>

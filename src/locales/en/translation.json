@@ -1,0 +1,63 @@
+{
+  "auth": {
+    "phoneInUse": "This phone number is already in use",
+    "invalidCredentials": "Invalid phone number or password",
+    "sessionNotFound": "Session not found or refresh token is invalid",
+    "sessionExpired": "Session has expired. Please log in again",
+    "sessionRefreshed": "Session refreshed successfully",
+    "passwordResetSent": "If an account with this phone number exists and has a linked Telegram, a reset code has been sent",
+    "invalidResetCode": "Invalid phone number or reset code, or code has expired",
+    "passwordResetSuccess": "Password has been reset successfully",
+    "missingToken": "Missing access token"
+  },
+  "errors": {
+    "notFound": "Route not found",
+    "internal": "An unexpected internal server error occurred",
+    "accessDenied": "Access denied",
+    "noFileUploaded": "No file uploaded. Please include an image file",
+    "invalidToken": "Invalid or expired token",
+    "validationError": "Validation error. Please check your input data",
+    "alreadyExists": "{field} already exists",
+    "pageNumber": "The page number must be greater than 0",
+    "updateRequired": "At least one field must be selected for updating",
+    "noFieldsToUpdate": "Request body does not contain any fields to update",
+    "emailNotChangeable": "Email address cannot be changed through this endpoint"
+  },
+  "category": {
+    "notFound": "Category not found",
+    "retrieved": "Categories retrieved successfully",
+    "retrievedById": "Category by ID retrieved successfully"
+  },
+  "good": {
+    "notFound": "Good not found",
+    "retrieved": "Goods retrieved successfully"
+  },
+  "feedback": {
+    "retrieved": "Feedbacks retrieved successfully",
+    "created": "Feedback created successfully"
+  },
+  "profile": {
+    "updated": "Profile updated successfully",
+    "deleted": "Profile deleted successfully",
+    "avatarUpdated": "Avatar updated successfully",
+    "telegramBotNotConfigured": "Telegram bot is not configured on the server"
+  },
+  "subscription": {
+    "welcomeSubject": "Welcome to Clothica! Thank you for subscribing 🎉",
+    "alreadySubscribed": "You are already subscribed to our newsletter!",
+    "success": "You have successfully subscribed to our newsletter!"
+  },
+  "rateLimit": {
+    "auth": "Too many auth attempts from this IP. Please try again later.",
+    "search": "Too many search requests from this IP. Please slow down."
+  },
+  "telegram": {
+    "userNotFound": "❌ Error: User not found",
+    "alreadyLinked": "✅ Your account is already linked",
+    "linkSuccess": "✅ Your Clothica account has been successfully linked! You can now use the bot's features",
+    "linkError": "❌ An error occurred while linking your account. Please try again later",
+    "welcome": "Welcome to Clothica! To link this Telegram account to your profile on the site, please go to your personal account and click \"Link Telegram\".\n\nFor help, type /help",
+    "help": "*Available commands:*\n\n/start - Start the bot and link your account.\n/help - Show this message",
+    "resetCodeMessage": "Your one-time password reset code for Clothica is: \n\n*{code}* \n\nDo not share this code with anyone"
+  }
+}

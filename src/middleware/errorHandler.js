@@ -7,7 +7,7 @@ export const errorHandler = (err, req, res, next) => {
     if (process.env.NODE_ENV === 'production') {
       return res.status(400).json({
         success: false,
-        message: 'Validation error. Please check your input data',
+        message: req.t('errors.validationError'),
       });
     }
     const errors = Object.values(err.errors).map((error) => ({
@@ -16,25 +16,26 @@ export const errorHandler = (err, req, res, next) => {
     }));
     return res.status(400).json({
       success: false,
-      message: 'Validation error',
+      message: req.t('errors.validationError'),
       errors,
     });
   }
 
   if (err.code === 11000) {
     const field = Object.keys(err.keyPattern)[0];
+    const message = req.t('errors.alreadyExists', {
+      field: field.charAt(0).toUpperCase() + field.slice(1),
+    });
     return res.status(409).json({
       success: false,
-      message: `${
-        field.charAt(0).toUpperCase() + field.slice(1)
-      } already exists`,
+      message,
     });
   }
 
   if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
     return res.status(401).json({
       success: false,
-      message: 'Invalid or expired token',
+      message: req.t('errors.invalidToken'),
     });
   }
 
@@ -48,7 +49,7 @@ export const errorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     return res.status(500).json({
       success: false,
-      message: 'An unexpected internal server error occurred',
+      message: req.t('errors.internal'),
     });
   }
 
