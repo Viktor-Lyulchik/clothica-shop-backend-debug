@@ -27,6 +27,8 @@ import goodRoutes from './routes/goodRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
+import i18next from './config/i18n.js';
+import i18nextMiddleware from 'i18next-http-middleware';
 
 const app = express();
 const PORT = process.env.PORT ?? 3030;
@@ -64,7 +66,7 @@ const createAdminJS = () => {
         maxAge: 1000 * 60 * 60 * 24,
       },
       name: 'adminjs',
-    }
+    },
   );
   app.use(admin.options.rootPath, adminRouter);
 
@@ -85,9 +87,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.use(helmet({
-  contentSecurityPolicy: false,
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 
 const allowList = [
   process.env.CLIENT_URL,
@@ -113,6 +117,8 @@ if (isProd) {
 } else {
   app.use(cors());
 }
+
+app.use(i18nextMiddleware.handle(i18next));
 
 app.use(cookieParser());
 

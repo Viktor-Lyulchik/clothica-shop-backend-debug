@@ -1,8 +1,12 @@
 import TelegramBot from 'node-telegram-bot-api';
+import i18next from '../config/i18n.js';
 import { User } from '../models/user.js';
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 let bot;
+
+const ukT = await i18next.getFixedT('uk');
+const enT = await i18next.getFixedT('en');
 
 if (token) {
   bot = new TelegramBot(token);
@@ -10,42 +14,37 @@ if (token) {
   bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     const chatId = msg.chat.id;
     const userId = match[1];
+    const lang = msg.from.language_code === 'uk' ? 'uk' : 'en';
+    const t = lang === 'uk' ? ukT : enT;
 
     if (userId) {
       try {
         const user = await User.findById(userId);
         if (!user) {
-          return bot.sendMessage(chatId, '❌ Помилка: Користувач не знайдений');
+          return bot.sendMessage(chatId, t('telegram.userNotFound'));
         }
         if (user.telegramLinked) {
-          return bot.sendMessage(chatId, '✅ Ваш акаунт вже привʼязаний');
+          return bot.sendMessage(chatId, t('telegram.alreadyLinked'));
         }
         await User.findByIdAndUpdate(userId, {
           telegramChatId: chatId,
           telegramUserId: msg.from.id,
           telegramLinked: true,
         });
-        bot.sendMessage(
-          chatId,
-          `✅ Ваш акаунт Clothica успішно прив'язаний! Тепер ви можете використовувати функціонал бота`,
-        );
+        bot.sendMessage(chatId, t('telegram.linkSuccess'));
       } catch (error) {
         console.error('Error linking telegram account:', error);
-        bot.sendMessage(
-          chatId,
-          `❌ Сталася помилка при прив'язці акаунта. Спробуйте пізніше`,
-        );
+        bot.sendMessage(chatId, t('telegram.linkError'));
       }
     } else {
-      bot.sendMessage(
-        chatId,
-        `Вітаємо в Clothica! Щоб прив'язати цей Telegram-акаунт до вашого профілю на сайті, будь ласка, перейдіть в особистий кабінет і натисніть "Прив'язати Telegram".\n\nДля допомоги введіть /help`,
-      );
+      bot.sendMessage(chatId, t('telegram.welcome'));
     }
   });
   bot.onText(/\/help/, (msg) => {
     const chatId = msg.chat.id;
-    const helpText = `*Доступні команди:*\n\n/start - Почати роботу з ботом та прив'язати акаунт.\n/help - Показати це повідомлення`;
+    const lang = msg.from.language_code === 'uk' ? 'uk' : 'en';
+    const t = lang === 'uk' ? ukT : enT;
+    const helpText = t('telegram.help');
     bot.sendMessage(chatId, helpText, { parse_mode: 'Markdown' });
   });
 } else {
@@ -72,6 +71,6 @@ export const processTelegramUpdate = (update) => {
 
 export const sendPasswordResetCode = async (chatId, code) => {
   if (!bot) return;
-  const message = `Ваш одноразовий код для скидання пароля в Clothica: \n\n*${code}* \n\nНікому не повідомляйте цей код`;
+  const message = ukT('telegram.resetCodeMessage', { code });
   await bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
 };
